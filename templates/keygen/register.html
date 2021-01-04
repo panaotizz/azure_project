@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Dynamically Add Remove Table Rows in JavaScript</title>
+{% endblock %}
+
+{% block header %}
+    register
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-6">
+{#        <form method="post">#}
+            {% csrf_token %}
+            <table class="table">
+                <tr>
+                    <th scope="col">Attribute Name</th>
+                    <th scope="col">Attribute Value</th>
+                    <th></th>
+                </tr>
+                <tbody>
+                    <tr>
+                        <td><input name="input[]"/></td>
+                        <td><input name="input[]"/></td>
+                        <td><button type="button" class="btn btn-xs btn-add"><i class="fa fa-plus" aria-hidden="true"></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
+{#        </form>#}
+    </div>
+</div>
+<div class="row">
+    <button type="button" data-csrf="{{ csrf_token }}" data-action="{% url 'register_submit' %}" onclick="submit(this)" >Submit data</button>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static '/js/register.js' %}"></script>
+{% endblock %}

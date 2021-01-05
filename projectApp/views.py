@@ -90,7 +90,7 @@ def download_pubkey(self):
 
 def setup(self):
     print('Running Setup')
-    res = subprocess.call(["../../Runtime/pal_loader", "cpabe-setup.manifest"], cwd=settings.GRAPHENE_DIR)
+    res = subprocess.call(["../../Runtime/pal_loader", "cpabe-setup.manifest","SGX=1"], cwd=settings.GRAPHENE_DIR)
     return JsonResponse({"response": "success"}, safe=False)
 
 

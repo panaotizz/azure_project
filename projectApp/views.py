@@ -65,7 +65,7 @@ def register_submit(request):
     print(input_str.strip())
     PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
     arguments = PROJECT_PATH + "/graphene/Runtime/pal_loader"
-    arguments += " cpabe-keygen.manifest -o " + 'keys/' + request.user.username + " pub_key master_key " + input_str.strip()
+    arguments += " cpabe-keygen.manifest -o " + 'keys/' + request.user.username + " pub_key master_key " + input_str.strip()+' SGX=1'
     print(arguments)
     key_path = 'download_keys/' + request.user.username
 

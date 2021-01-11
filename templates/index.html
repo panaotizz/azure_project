@@ -2,78 +2,17 @@
 {% load static %}
 
 {% block title %}
-        <title>Home</title>
-{% endblock %}
-
-{% block header %}register
+    <title>Home</title>
 {% endblock %}
 
 {% block content %}
-     <h3>Welcome to the Master Authority</h3>
 
-    <button id="ajaxBtn" >Click here to setup</button>
-    <p id="p0"></p>
-    <p id="p1"></p>
-    <p id="p2"></p>
-    <p id="p3"></p>
-    <p id="p4"></p>
+    <h2>Welcome!</h2>
 
-    <div>
+    <h3><a href="{% url 'profile' %}">My profile</a></h3>
+    <h3><a href="{% url 'master_authority' %}">Master Authority</a></h3>
+    <h3 ><a href="{% url 'keygen' %}">Registration Authority</a></h3>
+    <h3><a >Revocation Authority (Todo)</a></h3>
 
-        My files
-        <ul>
-            {% for file in files %}
-            <li>
-                <a class="a-download">{{ file }}</a>
-                <button type="button" class="btn-revoke btn btn-info btn-xs" data-csrf="{{ csrf_token }}" data-action="{% url 'revoke' %}" onclick="revoke(this)">Edit</button>
-            </li>
-            {% endfor %}
-        </ul>
-        {% include "modal.html" %}
-    </div>
-{% endblock %}
-
-{% block scripts %}
-    {{ block.super }}
-    <script type="text/javascript">
-        $(document).ready(function () {
-		    $('#ajaxBtn').click(function(){
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url 'graphene_setup' %}',
-                    data: {
-                        'csrfmiddlewaretoken': '{{ csrf_token }}'
-                    },
-                    success: function (data, status, xhr) {    // success callback function
-                        $('#p0').append(data);
-                        window.location.reload();
-                    }
-                });
-                $('#ajaxBtn').hide()
-		    });
-        });
-        $(document).ready(function () {
-
-            $.ajax({
-                type: 'POST',
-                url: '{% url 'graphene_setup_check' %}',
-                data: {
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function (data, status, xhr) {    // success callback function
-                    if (data['success']=="true") {
-                        $('#p1').append('Setup is completed');
-                        $('#p2').append('<a href={% url 'pub_key' %}>Click here to download pub_key </a><br>')
-                        $('#p3').append('<a href={% url 'keygen' %}>Click here to generate a new key </a><br><br>')
-                        {#$('#p4').append('<a href="/" > Click here to return to main page')#}
-                        $('#ajaxBtn').hide()
-                    }
-				}
-            })
-
-
-		 });
-    </script>
-
-    <script src="{% static '/js/modal.js' %}"></script>
+    <h4 ><a href="{% url 'users' %}">View all users</a></h4>
 {% endblock %}

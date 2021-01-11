@@ -7,3 +7,4 @@ testuser1/rce.py,ggg
 testuser1/rce.py,ddd
 testuser1/rce.py,vvvv
 testuser1/rce.py,testestset
+egwime1/file ,abc

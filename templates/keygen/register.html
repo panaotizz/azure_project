@@ -10,9 +10,9 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-6">
-{#        <form method="post">#}
+    <div class="row">
+        <div class="col-6">
+            {#        <form method="post">#}
             {% csrf_token %}
             <table class="table">
                 <tr>
@@ -21,19 +21,26 @@
                     <th></th>
                 </tr>
                 <tbody>
-                    <tr>
-                        <td><input name="input[]"/></td>
-                        <td><input name="input[]"/></td>
-                        <td><button type="button" class="btn btn-xs btn-add"><i class="fa fa-plus" aria-hidden="true"></i></button></td>
-                    </tr>
+                <tr>
+                    <td><input name="input[]"/></td>
+                    <td><input name="input[]"/></td>
+                    <td>
+                        <button type="button" class="btn btn-xs btn-add"><i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-{#        </form>#}
+            {#        </form>#}
+        </div>
     </div>
-</div>
-<div class="row">
-    <button type="button" data-csrf="{{ csrf_token }}" data-action="{% url 'register_submit' %}" onclick="submit(this)" >Submit data</button>
-</div>
+    <p id="message"></p>
+    <div class="row">
+        <button type="button" data-csrf="{{ csrf_token }}" data-action="{% url 'register_submit' %}"
+                onclick="submit(this)">Submit data
+        </button>
+    </div>
+
 {% endblock %}
 
 

@@ -2,31 +2,32 @@
 {% load static %}
 
 {% block title %}
-        <title>Home</title>
-{% endblock %}
-
-{% block header %}
-     <h3>Welcome to the Master Authority</h3>
+    <title>Home</title>
 {% endblock %}
 
 {% block content %}
-
     <div>
-    {{ user }} files
+        {{ view_username }} Encrypted Files:
         <ul>
-            {% for file in files %}
-            <li>
-                <a class="a-download">{{ file }}</a>
-            </li>
-            {% endfor %}
+            {% if files %}
+                {% for file in files %}
+                    <li>
+                        <a class="a-download" download href="{{ file }}">{{ file }} </a>
+                        <button type="button" class="btn-revoke btn btn-info btn-xs" data-csrf="{{ csrf_token }}"
+                                data-action="{% url 'revoke' %}" onclick="revoke(this)">Edit access
+                        </button>
+                    </li>
+                {% endfor %}
+            {% endif %}
         </ul>
 
-        <a type="button" class="btn btn-info" href="{% url 'users' %}">Back</a>
-
     </div>
+    {% include "modal.html" %}
+
 {% endblock %}
 
 {% block scripts %}
     {{ block.super }}
+    <script src="{% static 'js/modal.js' %}"></script>
 
 {% endblock %}

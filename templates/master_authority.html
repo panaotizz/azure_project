@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+        <title>Home</title>
+{% endblock %}
+
+{% block content %}
+
+     <h3>Welcome to the Master Authority</h3>
+    <h4> Status:     <span id="p1"></span></h4>
+    <button id="ajaxBtn" >Click here to setup</button>
+    <p id="p0"></p>
+    <p id="p2"></p>
+    <p id="p3"></p>
+    <p id="p4"></p>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+		    $('#ajaxBtn').click(function(){
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'graphene_setup' %}',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data, status, xhr) {    // success callback function
+                        $('#p0').append(data);
+                        window.location.reload();
+                    }
+                });
+                $('#ajaxBtn').hide()
+		    });
+        });
+        $(document).ready(function () {
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'graphene_setup_check' %}',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data, status, xhr) {    // success callback function
+                    if (data['success']=="true") {
+                        $('#p1').append('Setup is complete <i class=\"fa fa-check\"></i>');
+                        $('#p2').append('<a href={% url 'pub_key' %}>Click here to download pub_key </a><br>')
+                        $('#ajaxBtn').hide()
+                    }
+				}
+            })
+
+
+		 });
+    </script>
+
+    <script src="{% static '/js/modal.js' %}"></script>
+{% endblock %}

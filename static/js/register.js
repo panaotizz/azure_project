@@ -47,6 +47,9 @@ jsonData= JSON.stringify(Object.assign({}, dataa));
         } ,
         success: function (data) {
             console.log(data);
+             $('#message').append('<a download href='+data['file_path']+' >click here to download </a>');
+             //$('#message').append('asdasdasd ');
+
         }
     });
 

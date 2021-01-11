@@ -22,9 +22,14 @@ def index(request):
     return render(request, 'index.html')
 
 
+def master_authority(request):
+    return render(request, 'master_authority.html')
+
+
 @login_required
 def register(request):
     return render(request, 'keygen/register.html')
+
 
 @login_required
 def register_submit(request):
@@ -43,7 +48,7 @@ def register_submit(request):
     # print(len(array))
     # print(array)
     for i in range(0, int((len(array))), 2):  # num of rows in table'
-        print(array[i+1])
+        print(array[i + 1])
         if array[i + 1] == "":
             # print('Line ' + str(i) + ' NO number')
             input_str = input_str + (array[i].replace("'", ""))
@@ -59,16 +64,15 @@ def register_submit(request):
             input_str += " "
     print(input_str.strip())
     PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
-    arguments=PROJECT_PATH + "/graphene/Runtime/pal_loader"
-    arguments += " cpabe-keygen.manifest pub_key master_key "+input_str.strip()
+    arguments = PROJECT_PATH + "/graphene/Runtime/pal_loader"
+    arguments += " cpabe-keygen.manifest -o " + 'keys/' + request.user.username + " pub_key master_key " + input_str.strip()
     print(arguments)
+    key_path = 'download_keys/' + request.user.username
 
     print(PROJECT_PATH + "/graphene/Runtime/pal_loader")
     res = subprocess.call([arguments], cwd=settings.GRAPHENE_DIR, shell=True)
-    print (res)
-    return JsonResponse({"response": "success"})
-
-
+    print(res)
+    return JsonResponse({'success': 'true', 'file_path': key_path})
 
 
 def graphene_setup_check(self):
@@ -88,9 +92,20 @@ def download_pubkey(self):
     raise Http404
 
 
+def download_key(self, username):
+    file_path = os.path.join(settings.GRAPHENE_DIR, 'keys', username)
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/octet-stream")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    raise Http404
+
+
 def setup(self):
     print('Running Setup')
-    res = subprocess.call(["../../Runtime/pal_loader", "cpabe-setup.manifest","SGX=1"], cwd=settings.GRAPHENE_DIR)
+    res = subprocess.call(["../../Runtime/pal_loader", "cpabe-setup.manifest", "SGX=1"], cwd=settings.GRAPHENE_DIR)
+    print(res)
     return JsonResponse({"response": "success"}, safe=False)
 
 
@@ -107,15 +122,30 @@ def registerView(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
+def download_file(request, user, filename):
+    print(request)
+    file_path = os.path.join(settings.MEDIA_ROOT, user, filename)
+    print(file_path)
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/octet-stream")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    raise Http404
+
+    pass
+
+
 def profileView(request):
     username = None
     if request.user.is_authenticated:
         username = request.user.get_username()
     s = FileSystemStorage()
-    # checkIfFolderExistOrCreate(s.location, username)
+    checkIfFolderExistOrCreate(s.location, username)
     files = list(get_files(s, location=username))
 
-    return render(request, 'index.html', {
+    return render(request, 'user.html', {
+        'view_username': username,
         'files': files,
     })
 
@@ -134,8 +164,8 @@ def userView(request, user):
     # checkIfFolderExistOrCreate(s.location, user)
     files = list(get_files(s, location=user))
     return render(request, 'user.html', {
-        'user': user,
         'files': files,
+        'view_username': user
     })
 
 
@@ -182,8 +212,8 @@ def revokeSaveView(request):
     myfile = request.POST['filename']
     user = request.POST['user']
     PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
-    with open(PROJECT_PATH+'/revoked.txt', "a") as data_file:
-        data_file.write(myfile+','+user+'\n')
+    with open(PROJECT_PATH + '/revoked.txt', "a") as data_file:
+        data_file.write(myfile + ',' + user + '\n')
     data_file.close()
 
     data = {
@@ -197,22 +227,22 @@ def revokeRemoveView(request):
     user = request.POST['user']
     PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
     data_file = open(PROJECT_PATH + '/revoked.txt', 'r')
-    lineToDel=None;
-    lines=[]
+    lineToDel = None;
+    lines = []
     for line in data_file:
         lines.append(line)
         line.strip().split('/n')
         parts = line.split(',')
         if parts[0] == myfile and parts[1].rstrip("\n") == user:
-            lineToDel=line
+            lineToDel = line
     data_file.close()
     # print(lines)
     # print(lineToDel)
     with open(PROJECT_PATH + '/revoked.txt', "w") as f:
         for line in lines:
-           line.strip().split('/n')
-           if line!=lineToDel:
-               f.write(line)
+            line.strip().split('/n')
+            if line != lineToDel:
+                f.write(line)
     f.close()
 
     data = {

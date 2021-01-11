@@ -1,5 +1,6 @@
 function revoke(btn){
     const filename = $(btn).closest('li').find('a').text();
+    console.log(filename)
     $.ajax({
         type: 'POST',
         url: $(btn).closest('li').children('button').data('action'),

@@ -2,3 +2,13 @@ table { width: 70%; }
 table, th, td { border: solid 1px #DDD;
     border-collapse: collapse; padding: 2px 3px; text-align: center;
 }
+
+nav{
+    border-radius: 0px!important;
+    border: 0px solid !important;
+}
+
+.row{
+    margin-right: 0;
+    margin-left: 0;
+}

@@ -14,19 +14,19 @@ urlpatterns = [
     path('register_submit', views.register_submit, name='register_submit'),
     path('download_keys/<str:username>',views.download_key,name="download_key"),
     # these are for account creation
-    path('accounts/login/', LoginView.as_view(), name='login'),
-    path('accounts/register/', views.registerView, name='register'),
-    path('accounts/logout/', LogoutView.as_view(), name="logout"),
-    path('accounts/profile/', views.profileView, name='profile'),
-    path('accounts/all/', views.usersView, name='users'),
-    path('accounts/<str:user>', views.userView, name='user'),
-    path('accounts/<str:user>/<str:filename>', views.download_file, name='download'),
-    path('accounts/profile/<str:user>/<str:filename>', views.download_file, name='download'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('register/', views.registerView, name='register'),
+    path('logout/', LogoutView.as_view(), name="logout"),
+    path('profile/', views.profileView, name='profile'),
+    path('all/', views.usersView, name='users'),
+    path('<str:user>', views.userView, name='user'),
+    path('<str:user>/<str:filename>', views.download_file, name='download'),
+    path('profile/<str:user>/<str:filename>', views.download_file, name='download'),
 
-    path('upload', views.uploadView, name='upload'),
+    path('upload/', views.uploadView, name='upload'),
 
-    path('revoke/view', views.revokeView, name='revoke'),
-    path('revoke/save', views.revokeSaveView, name='new_revoked_user'),
-    path('revoke/remove', views.revokeRemoveView, name='remove_revoked_user'),
+    path('revoke/view/', views.revokeView, name='revoke'),
+    path('revoke/save/', views.revokeSaveView, name='new_revoked_user'),
+    path('revoke/remove/', views.revokeRemoveView, name='remove_revoked_user'),
 
 ]

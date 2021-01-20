@@ -17,7 +17,7 @@ function revoke(btn){
 
 function remove(btn){
     const filename = $(btn).closest('.modal').find('.modal-title').html();
-    const user = $(btn).closest('div').find('li')[0].innerText;
+    const user = $(btn).parents('div.div-user').find('li')[0].innerText;
     $.ajax({
         type: 'POST',
         url: $(btn).data('action'),

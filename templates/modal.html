@@ -13,17 +13,24 @@
                     <form method="post" enctype="multipart/form-data">
                         <div class="revoked-users">
                             {% for revokedUser in revokedUsers %}
-                                <div class="div-user">
-
-                                    <li>{{ revokedUser }}</li>
+                                <div class="div-user row">
+                                    <div class="col-sm-3">
+                                        <li>{{ revokedUser }}</li>
+                                    </div>
+                                    <div class="col-sm-3">
                                     <button type="button" class="btn btn-xs btn-danger btn-remove"
                                             data-action="{% url 'remove_revoked_user' %}" data-csrf="{{ csrf_token }}"
                                             onclick="remove(this)">remove
                                     </button>
+                                    </div>
                                 </div>
                             {% endfor %}
                         </div>
-                        <input value="" class="input-new-revoke"/>
+                        <div class="row">
+                            <label> Revoke new User
+                                <input value="" class="input-new-revoke"/>
+                            </label>
+                        </div>
                     </form>
 
                 </div>

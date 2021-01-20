@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    <title>Dynamically Add Remove Table Rows in JavaScript</title>
+    Dynamically Add Remove Table Rows in JavaScript
 {% endblock %}
 
 {% block header %}
@@ -23,7 +23,7 @@
                 <tbody>
                 <tr>
                     <td><input name="input[]"/></td>
-                    <td><input name="input[]"/></td>
+                    <td><input type="number" name="input[]"/></td>
                     <td>
                         <button type="button" class="btn btn-xs btn-add"><i class="fa fa-plus" aria-hidden="true"></i>
                         </button>
@@ -36,7 +36,7 @@
     </div>
     <p id="message"></p>
     <div class="row">
-        <button type="button" data-csrf="{{ csrf_token }}" data-action="{% url 'register_submit' %}"
+        <button type="button" class="btn btn-info" data-csrf="{{ csrf_token }}" data-action="{% url 'register_submit' %}"
                 onclick="submit(this)">Submit data
         </button>
     </div>

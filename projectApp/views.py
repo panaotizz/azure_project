@@ -147,6 +147,7 @@ def profileView(request):
     return render(request, 'user.html', {
         'view_username': username,
         'files': files,
+        'enable_revoke': True,
     })
 
 
@@ -160,9 +161,13 @@ def usersView(request):
 
 
 def userView(request, user):
+    username = None
+    if request.user.is_authenticated:
+        username = request.user.get_username()
     s = FileSystemStorage()
-    # checkIfFolderExistOrCreate(s.location, user)
+    checkIfFolderExistOrCreate(s.location, user)
     files = list(get_files(s, location=user))
+    files = checkForRevokes(files, username)
     return render(request, 'user.html', {
         'files': files,
         'view_username': user
@@ -188,6 +193,19 @@ def uploadView(request):
     return render(request, 'upload.html')
 
 
+def checkForRevokes(files, user):
+    PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
+    data_file = open(PROJECT_PATH + '/revoked.txt', 'r')
+    for file in files:
+        for line in data_file:
+            newline = line.strip().rstrip()
+            if newline.startswith(file) and newline.endswith(user):
+                filename = newline.split(',')[0]
+                files.remove(filename)
+    data_file.close()
+    return files
+
+
 def checkIfFolderExistOrCreate(location, folder):
     if not os.path.isdir(location + '/' + folder):
         os.mkdir(location + '/' + folder)
@@ -195,11 +213,12 @@ def checkIfFolderExistOrCreate(location, folder):
 
 def revokeView(request):
     myfile = request.POST['filename']
+    myfile = myfile.strip().rstrip()
     PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
     data_file = open(PROJECT_PATH + '/revoked.txt', 'r')
     users = []
     for line in data_file:
-        line.strip().split('/n')
+        line = line.strip().rstrip()
         if line.startswith(myfile):
             users.append(line.split(',')[1])
     data_file.close()

@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-GRAPHENE_DIR = os.path.join(BASE_DIR, 'graphene/Examples/bashh/')
+GRAPHENE_DIR = os.path.join(BASE_DIR, 'graphene/Examples/bash/')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -25,7 +25,7 @@ SECRET_KEY = '2&c2mntx+sl@=q=%3%jl6oospd8#7hq1dbm^h#+bfuod&*(=zu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['51.144.130.227']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -122,8 +122,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(GRAPHENE_DIR, 'files/user_files' )
 
 LOGGING = {
     'version': 1,

@@ -65,13 +65,15 @@ def register_submit(request):
             input_str += " "
     print(input_str.strip())
     PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
-    arguments = PROJECT_PATH + "/graphene/Runtime/pal_loader"
-    arguments += " cpabe-keygen.manifest -o " + 'keys/' + request.user.username + " pub_key master_key " + input_str.strip()+' SGX=1'
+    arguments = "SGX=1 ./pal_loader bash -c \"cpabe-keygen -o files/keys/"+ request.user.username + " pub_key master_key " + input_str.strip()+'"'
+    
     print(arguments)
     key_path = 'download_keys/' + request.user.username
 
     print(PROJECT_PATH + "/graphene/Runtime/pal_loader")
     res = subprocess.call([arguments], cwd=settings.GRAPHENE_DIR, shell=True)
+    print(res)
+    res=subprocess.call('make SGX=1',cwd=settings.GRAPHENE_DIR,shell=True)
     print(res)
     return JsonResponse({'success': 'true', 'file_path': key_path})
 
@@ -94,7 +96,7 @@ def download_pubkey(self):
 
 
 def download_key(self, username):
-    file_path = os.path.join(settings.GRAPHENE_DIR, 'keys', username)
+    file_path = os.path.join(settings.GRAPHENE_DIR, 'files/keys', username)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:
             response = HttpResponse(fh.read(), content_type="application/octet-stream")
@@ -126,7 +128,7 @@ def registerView(request):
 
 def download_file(request, user, filename):
     print(request)
-    file_path = os.path.join(settings.MEDIA_ROOT, user, filename)
+    file_path = os.path.join(settings.GRAPHENE_DIR, 'files/user_files',user, filename)
     print(file_path)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:

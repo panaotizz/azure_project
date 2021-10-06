@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR =  '/var/www/azure_project/'
 GRAPHENE_DIR = os.path.join(BASE_DIR, 'graphene/Examples/bash/')
 
 # Quick-start development settings - unsuitable for production
@@ -24,7 +24,6 @@ SECRET_KEY = '2&c2mntx+sl@=q=%3%jl6oospd8#7hq1dbm^h#+bfuod&*(=zu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 
 
@@ -55,7 +54,7 @@ ROOT_URLCONF = 'djangoProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': '/var/www/azure_project/project_app/templates/'
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -78,7 +77,7 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR,'db.sqlite3'),
     }
 }
 
@@ -121,9 +120,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/"
 MEDIA_ROOT = os.path.join(GRAPHENE_DIR, 'files/user_files' )
 
+# settings.py
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -131,7 +132,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'filename': '/var/www/azure_project/debug.log',
         },
     },
     'loggers': {
@@ -142,4 +143,3 @@ LOGGING = {
         },
     },
 }
-

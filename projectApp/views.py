@@ -10,7 +10,8 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 import os
 import os.path
-
+import sys
+import logging
 # Create your views here.
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -18,7 +19,7 @@ from django.template.loader import render_to_string
 from djangoProject import settings
 
 
-@login_required
+@login_required(login_url='/login/')
 def index(request):
     return render(request, 'index.html')
 
@@ -72,8 +73,6 @@ def register_submit(request):
 
     print(PROJECT_PATH + "/graphene/Runtime/pal_loader")
     res = subprocess.call([arguments], cwd=settings.GRAPHENE_DIR, shell=True)
-    print(res)
-    res=subprocess.call('make SGX=1',cwd=settings.GRAPHENE_DIR,shell=True)
     print(res)
     return JsonResponse({'success': 'true', 'file_path': key_path})
 
@@ -198,8 +197,9 @@ def uploadView(request):
 
 
 def checkForRevokes(files, user):
-    PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
-    data_file = open(PROJECT_PATH + '/revoked.txt', 'r')
+    PROJECT_PATH = '/var/www/azure_project/'
+    print(PROJECT_PATH)
+    data_file = open(PROJECT_PATH + 'revoked.txt', 'r')
     for file in files:
         for line in data_file:
             newline = line.strip().rstrip()
@@ -218,8 +218,8 @@ def checkIfFolderExistOrCreate(location, folder):
 def revokeView(request):
     myfile = request.POST['filename']
     myfile = myfile.strip().rstrip()
-    PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
-    data_file = open(PROJECT_PATH + '/revoked.txt', 'r')
+    PROJECT_PATH = '/var/www/azure_project/'
+    data_file = open(PROJECT_PATH + 'revoked.txt', 'r')
     users = []
     for line in data_file:
         line = line.strip().rstrip()
@@ -234,8 +234,8 @@ def revokeView(request):
 def revokeSaveView(request):
     myfile = request.POST['filename']
     user = request.POST['user']
-    PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
-    with open(PROJECT_PATH + '/revoked.txt', "a") as data_file:
+    PROJECT_PATH = '/var/www/azure_project/'
+    with open(PROJECT_PATH + 'revoked.txt', "a") as data_file:
         data_file.write(myfile + ',' + user + '\n')
     data_file.close()
 
@@ -248,8 +248,8 @@ def revokeSaveView(request):
 def revokeRemoveView(request):
     myfile = request.POST['filename']
     user = request.POST['user']
-    PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
-    data_file = open(PROJECT_PATH + '/revoked.txt', 'r')
+    PROJECT_PATH = '/var/www/azure_project/'
+    data_file = open(PROJECT_PATH + 'revoked.txt', 'r')
     lineToDel = None;
     lines = []
     for line in data_file:
@@ -261,7 +261,7 @@ def revokeRemoveView(request):
     data_file.close()
     # print(lines)
     # print(lineToDel)
-    with open(PROJECT_PATH + '/revoked.txt', "w") as f:
+    with open(PROJECT_PATH + 'revoked.txt', "w") as f:
         for line in lines:
             line.strip().split('/n')
             if line != lineToDel:

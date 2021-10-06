@@ -28,5 +28,5 @@ urlpatterns = [
     path('revoke/view/', views.revokeView, name='revoke'),
     path('revoke/save/', views.revokeSaveView, name='new_revoked_user'),
     path('revoke/remove/', views.revokeRemoveView, name='remove_revoked_user'),
-
+    path('accounts/',LoginView.as_view(),name='login')
 ]
